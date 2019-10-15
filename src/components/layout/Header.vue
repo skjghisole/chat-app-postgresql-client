@@ -10,9 +10,6 @@
 	export default {
 		name: 'Header',
 		props: ['title'],
-		data() {
-			title: ''
-		}
 	}
 </script>
 

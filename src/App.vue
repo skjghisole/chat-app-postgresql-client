@@ -1,8 +1,9 @@
 <template>
   <div id="app">
-    <Header title="ChitChat" />
+    <Header :title="title" />
+    <NavBar :routeLinks="routeLinks" />
     <div id="app-container">
-
+      <router-view/>
     </div>
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
@@ -14,10 +15,27 @@
 
 <script>
   import Header from './components/layout/Header'
+  import NavBar from './components/layout/NavBar'
   export default {
     name: "App",
     components: {
-      Header
+      Header,
+      NavBar
+    },
+    data() {
+      return {
+        title: 'ChitChat',
+        routeLinks: [
+          {
+            route: '/',
+            name: 'Home'
+          },
+          {
+            route: '/about',
+            name: 'About'
+          }
+        ]
+      }
     }
   }
 </script>
