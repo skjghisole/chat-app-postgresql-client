@@ -2,7 +2,7 @@
 	<div id="outer-box">
 		<div id="container" :key="message.id" v-for="message in messages">
 			<div id="sender-box">
-				<p>{{message.sender}}</p>
+				<p>{{message.senderId}}</p>
 			</div>
 			<div id="message-box">
 				<p>{{message.content}}</p>

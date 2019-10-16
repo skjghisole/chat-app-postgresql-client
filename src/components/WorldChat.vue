@@ -21,7 +21,7 @@
 
 <script>
 import MessageContainer from './layout/MessageContainer'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Vue from 'vue'
 export default {
 
@@ -35,9 +35,15 @@ export default {
 		const { content, messages } = this
 		this.messages = messages.concat({ content, sender: `Anonymous-${Vue.user}`, id: "Vue.user"})
 		this.content = ''
-	}
+	},
+	...mapActions(['fetchAllMessages'])
   },
-  computed: mapGetters(['allMessages']),
+  computed: {
+	...mapGetters(['allMessages'])
+  },
+  created() {
+	this.fetchAllMessages()
+  },
   data () {
     return {
 		content: ''
