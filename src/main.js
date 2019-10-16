@@ -6,12 +6,9 @@ import store from './store'
 import socketIO from 'socket.io-client'
 
 const socket = socketIO.connect('http://localhost:2020')
-socket.on('sayHiFromServer', () => {
+socket.on('connectedUser', async ({ user }) => {
+	Vue.user = user
 	socket.emit('userConnected', { name: "karl" })
-})
-
-socket.on('newUser', ({ msg }) => {
-	console.log(msg)
 })
 
 Vue.config.productionTip = false
