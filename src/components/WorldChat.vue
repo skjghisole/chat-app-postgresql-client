@@ -5,27 +5,42 @@
 		</h1>
 		<div id="outer-box">
 			<div id="chat-container">
+				<MessageContainer :messages="allMessages" />
 			</div>
-			<div id="input-container">
+			<form id="input-container" @submit="submitMessage">
 				<div id="message-container">
-					<input placeholder="Write something here" id="message-input" />
+					<input v-model="content" placeholder="Write something here" id="message-input" />
 				</div>
 				<div id="submission-container">
-					<button id="submit-btn">SUBMIT</button>
+					<button type="submit" id="submit-btn" value="Submit">SUBMIT</button>
 				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 </template>
 
 <script>
+import MessageContainer from './layout/MessageContainer'
+import { mapGetters } from 'vuex'
+import Vue from 'vue'
 export default {
 
   name: 'WorldChat',
-
+  components: {
+	MessageContainer
+  },
+  methods: {
+	submitMessage(e) {
+		e.preventDefault()
+		const { content, messages } = this
+		this.messages = messages.concat({ content, sender: `Anonymous-${Vue.user}`, id: "Vue.user"})
+		this.content = ''
+	}
+  },
+  computed: mapGetters(['allMessages']),
   data () {
     return {
-
+		content: ''
     }
   }
 }
