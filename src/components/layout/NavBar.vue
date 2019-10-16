@@ -21,16 +21,20 @@ export default {
 <style lang="css" scoped>
 	.link {
 		text-decoration: none;
+		margin: 0 1em;
 		font-size: 2em;
+		color: #f4f4f4;
 	}
 
 	.link:hover {
-		color: red;
+		color: coral;
 	}
 
 	#linkContainer {
 		display: flex;
-		text-align: center;
+		justify-content: center;
+		align-content: space-around;
+		background-color: #444444;
 	}
 
 </style>
