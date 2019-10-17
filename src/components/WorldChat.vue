@@ -56,7 +56,7 @@ export default {
 	#outer-box {
 		display: flex;
 		border: 0.1em solid coral;
-		min-height: 700px;
+		min-height: 500px;
 		flex-direction: column;
 	}
 	#chat-container {

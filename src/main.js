@@ -5,7 +5,7 @@ import store from './store'
 
 import socketIO from 'socket.io-client'
 
-const socket = socketIO.connect('http://localhost:2020')
+const socket = socketIO.connect('localhost:2020')
 socket.on('connectedUser', async ({ user }) => {
 	Vue.user = user
 	socket.emit('userConnected', { name: "karl" })
