@@ -33,6 +33,14 @@
           {
             route: '/about',
             name: 'About'
+          },
+          {
+            route: '/login',
+            name: 'Login'
+          },
+          {
+            route: '/register',
+            name: 'Register'
           }
         ]
       }
