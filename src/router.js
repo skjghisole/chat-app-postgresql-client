@@ -3,12 +3,22 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+const isAuthenticated = () => {
+  const token = localStorage.getItem('token')
+  return !!token
+}
+
+
 export default new Router({
   routes: [
     {
       path: '/',
       name: 'home',
-      component: () => import(/* webpackChunkName: "home" */ './views/Home')
+      component: () => import(/* webpackChunkName: "home" */ './views/Home'),
+      beforeEnter: (to, from, next) => {
+        if (!isAuthenticated()) next('/login')
+        else next()
+      }
     },
     {
       path: '/about',
