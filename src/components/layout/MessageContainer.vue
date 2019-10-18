@@ -25,6 +25,7 @@ export default {
 
 <style lang="css" scoped>
 	#outer-box-msg-container {
+		min-height: 500px;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
