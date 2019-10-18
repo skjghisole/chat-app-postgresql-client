@@ -7,9 +7,9 @@
 			<div id="chat-container">
 				<MessageContainer :messages="allMessages" />
 			</div>
-			<form id="input-container" @submit="submitMessage">
+			<form id="input-container" @submit.prevent="attemptPostMessage">
 				<div id="message-container">
-					<input v-model="content" placeholder="Write something here" id="message-input" />
+					<input v-model="content" placeholder="Write something here" id="message-input" autocomplete="off" />
 				</div>
 				<div id="submission-container">
 					<button type="submit" id="submit-btn" value="Submit">SUBMIT</button>
@@ -21,6 +21,7 @@
 
 <script>
 import MessageContainer from './layout/MessageContainer'
+import socket from '../socket'
 import { mapGetters, mapActions } from 'vuex'
 import Vue from 'vue'
 export default {
@@ -30,24 +31,25 @@ export default {
 	MessageContainer
   },
   methods: {
-	submitMessage(e) {
-		e.preventDefault()
-		const { content, messages } = this
-		this.messages = messages.concat({ content, sender: `Anonymous-${Vue.user}`, id: "Vue.user"})
-		this.content = ''
-	},
-	...mapActions(['fetchAllMessages'])
+	...mapActions(['fetchAllMessages', 'attemptInputChange', 'attemptPostMessage'])
   },
   computed: {
-	...mapGetters(['allMessages'])
+	...mapGetters(['allMessages', 'getContent']),
+	content: {
+		get: () => {
+			() => this.getContent
+		},
+		set(value) {
+			this.attemptInputChange({ name: 'content', value })
+		}
+	}
   },
   created() {
 	this.fetchAllMessages()
   },
-  data () {
-    return {
-		content: ''
-    }
+  mounted() {
+	socket.on('newMsg', this.fetchAllMessages)
+	// console.log(socket)
   }
 }
 </script>
@@ -56,12 +58,13 @@ export default {
 	#outer-box {
 		display: flex;
 		border: 0.1em solid coral;
-		min-height: 500px;
+		max-height: 500px;
 		flex-direction: column;
 	}
 	#chat-container {
 		border: 0.3em solid coral;
 		flex: 7;
+		overflow-y: scroll;
 	}
 	#input-container {
 		display: flex;
@@ -84,6 +87,7 @@ export default {
 		border: 0;
 		width: 100%;
 		height: 100%;
+		outline: none;
 	}
 	#submit-btn {
 		width: 100%;
