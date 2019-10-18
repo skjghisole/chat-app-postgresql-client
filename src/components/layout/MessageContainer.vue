@@ -52,10 +52,10 @@ export default {
 	}
 
 	#message-box {
-
+		padding: 0 0.5em 0.3em;
 	}
 	
 	#sender-box {
-
+		padding: 0.2em 0.5em 0.3em;
 	}
 </style>

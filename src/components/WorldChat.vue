@@ -44,11 +44,26 @@ export default {
 		}
 	}
   },
-  created() {
-	this.fetchAllMessages()
+  async created() {
+	await this.fetchAllMessages()
+	const chatContainer = document.getElementById('chat-container')
+	console.log(chatContainer.scrollHeight)
+	chatContainer.scroll({
+		top: chatContainer.scrollHeight,
+		left: 0,
+		behavior: 'smooth'
+	})
   },
   mounted() {
-	socket.on('newMsg', this.fetchAllMessages)
+	socket.on('newMsg', async () => { 
+		await this.fetchAllMessages()
+		const chatContainer = document.getElementById('chat-container')
+		chatContainer.scrollTo({
+			top: chatContainer.scrollHeight,
+			left: 0,
+			// behavior: 'smooth'
+		})
+	})
 	// console.log(socket)
   }
 }
@@ -94,6 +109,7 @@ export default {
 		height: 100%;
 		background-color: coral;
 		color: white;
+		outline: none;
 	}
 	#submit-btn:hover {
 		background-color: #F0A160;
