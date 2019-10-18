@@ -28,7 +28,11 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: () => import(/* webpackChunkName: "login" */ './views/Login')
+      component: () => import(/* webpackChunkName: "login" */ './views/Login'),
+      beforeEnter: (to, from, next) => {
+        if (isAuthenticated()) next('/')
+        else next()
+      }
     }
   ]
 })
