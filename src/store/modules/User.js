@@ -30,7 +30,7 @@ const actions = {
 	attemptLogin: async ({ commit, state }) => {
 		const { userLogin } = state
 		try {
-			const res = await fetch('http://localhost:2020/users/login', {
+			const res = await fetch(`${process.env.VUE_APP_SERVER_URL}/users/login`, {
 				method: 'POST', 
 				body: JSON.stringify({...userLogin}), // data can be `string` or {object}!
 				headers: {

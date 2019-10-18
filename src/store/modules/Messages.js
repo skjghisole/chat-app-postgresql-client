@@ -1,5 +1,4 @@
 import User from './User'
-
 const state = {
 	messages: [],
 	content: ''
@@ -12,7 +11,7 @@ const getters = {
 
 const actions = {
 	fetchAllMessages: async ({ commit }) => {
-		const res = await fetch('http://localhost:2020/messages')
+		const res = await fetch(`${process.env.VUE_APP_SERVER_URL}/messages`)
 		const data = await res.json()
 		commit('setMessages', data)
 	},
@@ -31,6 +30,9 @@ const actions = {
 		} catch (e) {
 			console.log(e)
 		}
+	},
+	attemptReset: ({ commit }, toReset) => {
+		commit('handleReset', toReset)
 	}
 }
 
@@ -42,15 +44,26 @@ const mutations = {
 		state[name] = value
 	},
 	handlePost: async (state, data) => {
-		const res = await fetch('http://localhost:2020/messages', {
-			method: 'POST',
-			body: JSON.stringify(data),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-		const message = await res.json()
-		console.log(message)
+		try {
+			if (!data.content) throw new Error('Unable to send empty content')
+			const res = await fetch(`${process.env.VUE_APP_SERVER_URL}/messages`, {
+				method: 'POST',
+				body: JSON.stringify(data),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			await res.json()
+			state.content = ''
+		} catch (e) {
+			console.log(e)
+		}
+
+	},
+	handleReset: (state, data) => {
+		console.log(data)
+		state = { ...state, ...data }
+		console.log(state)
 	}
 }
 
