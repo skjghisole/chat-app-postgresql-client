@@ -1,8 +1,8 @@
 <template>
-	<div id="outer-box">
-		<div id="container" :key="message.id" v-for="message in messages">
+	<div id="outer-box-msg-container">
+		<div v-bind:class="[getLoggedInUser.id === message.senderId ? 'isUser' : 'isNotUser']" id="container" :key="message.id" v-for="message in messages">
 			<div id="sender-box">
-				<p>{{message.senderId}}</p>
+				<p>{{getLoggedInUser.id === message.senderId ? 'you' : message.User.username}}</p>
 			</div>
 			<div id="message-box">
 				<p>{{message.content}}</p>
@@ -12,18 +12,32 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 
   name: 'MessageContainer',
-  props: ['messages']
+  props: ['messages'],
+  computed: {
+	...mapGetters(['getLoggedInUser'])
+  }
 }
 </script>
 
 <style lang="css" scoped>
-	#outer-box {
+	#outer-box-msg-container {
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
+		overflow-y: scroll;
+	}
+
+	.isUser {
+		align-self: flex-start;
+		/* background-color:  blue; */
+	}
+
+	.isNotUser {
+		align-self: flex-end;
 	}
 
 	#container {
