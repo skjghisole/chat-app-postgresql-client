@@ -10,20 +10,35 @@ const getters = {
 }
 
 const actions = {
-	fetchAllMessages: async ({ commit }) => {
-		const res = await fetch(`${process.env.VUE_APP_SERVER_URL}/messages`)
+	fetchAllMessages: async ({ commit }, { channelId }) => {
+		const res = await fetch(`${process.env.VUE_APP_SERVER_URL}/messages?channelId=${channelId}`)
 		const data = await res.json()
 		commit('setMessages', data)
 	},
-	attemptInputChange: ({ commit }, data) => {
-		commit('handleInputChange', data)
-	},
-	attemptPostMessage: async ({ commit, state }) => {
+	attemptPostWorldMessage: async ({ commit }) => {
 		try {
 			const { state: { user: { id } } } = User
 			const data = {
 				senderId: id,
-				content: state.content
+				content: state.content,
+				channelId: 'world'
+			}
+			console.log(data)
+			commit('handlePost', data)
+		} catch (e) {
+			console.log(e)
+		}
+	},
+	attemptInputChange: ({ commit }, data) => {
+		commit('handleInputChange', data)
+	},
+	attemptPostMessage: async ({ commit, state }, { channelId }) => {
+		try {
+			const { state: { user: { id } } } = User
+			const data = {
+				senderId: id,
+				content: state.content,
+				channelId
 			}
 			console.log(data)
 			commit('handlePost', data)
@@ -54,7 +69,6 @@ const mutations = {
 				}
 			})
 			await res.json()
-			state.content = ''
 		} catch (e) {
 			console.log(e)
 		}
