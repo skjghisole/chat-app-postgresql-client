@@ -5,11 +5,22 @@
 		</h1>
 		<div id="outer-box">
 			<div id="chat-container">
-				<MessageContainer :messages="messages" />
+				<MessageContainer :messages="allMessages"/>
+				<div v-for="message in typingMessages" id="typing-container">
+					<p class="typing-span" v-show="typing">{{message}}</p>
+				</div>
 			</div>
-			<form id="input-container" @submit.prevent="attemptPostWorldMessage">
+			<form id="input-container" @submit.prevent="handlePost">
 				<div id="message-container">
-					<input v-model="content" placeholder="Write something here" id="message-input" autocomplete="off" />
+					<input
+						:value="getContent"
+						@input="attemptInputChange"
+						name="content"
+						placeholder="Write something here"
+						id="message-input"
+						autocomplete="off"
+						@keyup="handleKeyUp"
+					/>
 				</div>
 				<div id="submission-container">
 					<button type="submit" id="submit-btn" value="Submit">SUBMIT</button>
@@ -20,49 +31,69 @@
 </template>
 
 <script>
-import MessageContainer from './layout/MessageContainer'
 import socket from '../socket'
+import MessageContainer from './layout/MessageContainer'
 import { mapGetters, mapActions } from 'vuex'
 import Vue from 'vue'
 export default {
-
   name: 'WorldChat',
   components: {
 	MessageContainer
   },
-  props: ['messages'],
+  props: ['handlePost', 'channelId', 'eventToEmit'],
   methods: {
-	...mapActions(['fetchAllMessages', 'attemptInputChange', 'attemptPostWorldMessage'])
+	handleKeyUp(e) {
+		socket.emit('typing', { channelId: this.channelId, username: this.getLoggedInUser.username })
+	},
+	...mapActions(['attemptInputChange']),
   },
   computed: {
-	...mapGetters(['allMessages', 'getContent']),
-	content: {
-		get: () => {
-			() => this.getContent
-		},
-		set(value) {
-			this.attemptInputChange({ name: 'content', value })
-		}
-	}
+	...mapGetters(['allMessages', 'getContent', 'getLoggedInUser']),
   },
   async created() {
-	await this.fetchAllMessages({ channelId: 'world' })
+	await this.eventToEmit({
+		channelId: this.channelId
+	})
 	const chatContainer = document.getElementById('chat-container')
-	chatContainer.scroll({
+	chatContainer.scrollTo({
 		top: chatContainer.scrollHeight,
 		left: 0,
 		behavior: 'smooth'
 	})
   },
   mounted() {
-	socket.on('newMsg', async () => { 
-		await this.fetchAllMessages({ channelId: 'world' })
-		const chatContainer = document.getElementById('chat-container')
+	const chatContainer = document.getElementById('chat-container')
+	const msgListener = `newMsg-${this.channelId}`
+    socket.on(msgListener, async () => {
+		await this.eventToEmit({
+			channelId: this.channelId
+		})
 		chatContainer.scrollTo({
 			top: chatContainer.scrollHeight,
 			left: 0,
 		})
-	})
+    })
+    socket.on(`typing-${this.channelId}`, async ({ username }) => {
+		this.typing = true
+		const message = `${username} is typing...`
+		if(!this.typingMessages.includes(message)) this.typingMessages = this.typingMessages.concat(message)
+		chatContainer.scrollTo({
+			top: chatContainer.scrollHeight,
+			left: 0,
+		})
+		if (this.typingTimeout) clearTimeout(this.typingTimeout)
+		this.typingTimeout = setTimeout(() => {
+			this.typing = false
+			this.typingMessages.splice(this.typingmessages.findIndex(msg => msg == message), 1)
+		}, 1000)
+    })
+  },
+  data() {
+	return {
+		typing: false,
+		typingTimeout: null,
+		typingMessages: []
+	}
   }
 }
 </script>
@@ -116,5 +147,14 @@ export default {
 		margin: 0.5em 0;
 		display: flex;
 		justify-content: center;
+	}
+	.typing-span {
+		float: right;
+		margin: 0.7em 0.5em;
+		line-height: 0.1em;
+	}
+	#typing-container {
+		display: flex;
+		flex-direction: column;
 	}
 </style>
