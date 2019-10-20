@@ -67,6 +67,7 @@ const mutations = {
 				}
 			})
 			await res.json()
+			state.content = ''
 		} catch (e) {
 			console.log(e)
 		}
