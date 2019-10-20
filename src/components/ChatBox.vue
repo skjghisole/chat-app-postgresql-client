@@ -5,9 +5,9 @@
 		</h1>
 		<div id="outer-box">
 			<div id="chat-container">
-				<MessageContainer :messages="allMessages" />
+				<MessageContainer :messages="messages" />
 			</div>
-			<form id="input-container" @submit.prevent="attemptPostMessage">
+			<form id="input-container" @submit.prevent="attemptPostWorldMessage">
 				<div id="message-container">
 					<input v-model="content" placeholder="Write something here" id="message-input" autocomplete="off" />
 				</div>
@@ -30,8 +30,9 @@ export default {
   components: {
 	MessageContainer
   },
+  props: ['messages'],
   methods: {
-	...mapActions(['fetchAllMessages', 'attemptInputChange', 'attemptPostMessage'])
+	...mapActions(['fetchAllMessages', 'attemptInputChange', 'attemptPostWorldMessage'])
   },
   computed: {
 	...mapGetters(['allMessages', 'getContent']),
@@ -45,9 +46,8 @@ export default {
 	}
   },
   async created() {
-	await this.fetchAllMessages()
+	await this.fetchAllMessages({ channelId: 'world' })
 	const chatContainer = document.getElementById('chat-container')
-	console.log(chatContainer.scrollHeight)
 	chatContainer.scroll({
 		top: chatContainer.scrollHeight,
 		left: 0,
@@ -56,15 +56,13 @@ export default {
   },
   mounted() {
 	socket.on('newMsg', async () => { 
-		await this.fetchAllMessages()
+		await this.fetchAllMessages({ channelId: 'world' })
 		const chatContainer = document.getElementById('chat-container')
 		chatContainer.scrollTo({
 			top: chatContainer.scrollHeight,
 			left: 0,
-			// behavior: 'smooth'
 		})
 	})
-	// console.log(socket)
   }
 }
 </script>
