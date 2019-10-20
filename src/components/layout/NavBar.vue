@@ -1,5 +1,5 @@
 <template>
-	<div id="linkContainer">
+	<div id="linkContainer" v-bind:class="[isSmaller ? 'smallerScreen' : 'biggerScreen']">
 		<router-link
 			:to="routeLink.route"
 			:key="routeLink.name"
@@ -15,6 +15,11 @@
 export default {
   name: 'NavBar',
   props: ['routeLinks'],
+  data() {
+	return {
+		isSmaller: window.screen.width < 900
+	}
+  }
 }
 </script>
 
@@ -37,4 +42,11 @@ export default {
 		background-color: #444444;
 	}
 
+	.biggerScreen {
+		flex-direction: row;
+	}
+
+	.smallerScreen {
+		flex-direction: column;
+	}
 </style>

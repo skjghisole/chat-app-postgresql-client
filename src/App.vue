@@ -1,15 +1,10 @@
 <template>
   <div id="app">
     <Header :title="title" />
-    <NavBar :routeLinks="routeLinks" />
-    <div id="app-container">
+    <NavBar :routeLinks="routeLinks"/>
+    <div id="app-container" v-bind:class="{ 'full-width': isSmaller, 'half-width': !isSmaller }">
       <router-view/>
     </div>
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/> -->
   </div>
 </template>
 
@@ -31,11 +26,15 @@
     },
     async created() {
       await this.attemptAuthenticateUser()
-      console.log(this.getLoggedInUser)
+    },
+    mounted() {
+      console.log(this.windowWidth)
     },
     data() {
       return {
         title: 'ChitChat',
+        windowWidth: window.screen.width,
+        isSmaller: window.screen.width < 900,
         routeLinks: [
           {
             route: '/',
@@ -66,8 +65,15 @@
   }
 
   #app-container {
-    max-width: 60%;
     margin: auto;
+  }
+
+  .half-width {
+    max-width: 60%;
+  }
+
+  .full-width {
+    max-width: 100%;
   }
 
   .submit-btn {

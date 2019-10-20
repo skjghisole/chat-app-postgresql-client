@@ -107,14 +107,13 @@ export default {
 	}
 	#chat-container {
 		border: 0.3em solid coral;
-		flex: 7;
 		overflow-y: scroll;
 	}
 	#input-container {
 		display: flex;
 		border: 0.5em solid coral;
-		flex: 1;
 		flex-direction: row;
+		height: 10em;
 	}
 	#message-container {
 		flex: 6;
