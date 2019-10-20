@@ -38,8 +38,9 @@ const actions = {
 				}
 			})
 			const data = await res.json()
-			const { message, token } = data
+			const { token } = data
 			localStorage.setItem('token', token)
+			commit('saveToken', token)
 		} catch (e) {
 			console.log(e)
 		}
