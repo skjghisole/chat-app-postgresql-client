@@ -33,6 +33,15 @@ export default new Router({
         if (isAuthenticated()) next('/')
         else next()
       }
+    },
+    {
+      path: '/messages/:id',
+      name: 'message',
+      component: () => import(/* webpackChunkName: "messages" */ './views/Messages'),
+      beforeEnter: (to, from, next) => {
+        if (!isAuthenticated()) next('/login')
+        else next()
+      }
     }
   ]
 })
