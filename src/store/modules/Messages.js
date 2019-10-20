@@ -23,14 +23,13 @@ const actions = {
 				content: state.content,
 				channelId: 'world'
 			}
-			console.log(data)
 			commit('handlePost', data)
 		} catch (e) {
 			console.log(e)
 		}
 	},
-	attemptInputChange: ({ commit }, data) => {
-		commit('handleInputChange', data)
+	attemptInputChange: ({ commit }, { target: { name, value }}) => {
+		commit('handleInputChange', { name, value })
 	},
 	attemptPostMessage: async ({ commit, state }, { channelId }) => {
 		try {
@@ -40,7 +39,6 @@ const actions = {
 				content: state.content,
 				channelId
 			}
-			console.log(data)
 			commit('handlePost', data)
 		} catch (e) {
 			console.log(e)
@@ -75,9 +73,7 @@ const mutations = {
 
 	},
 	handleReset: (state, data) => {
-		console.log(data)
 		state = { ...state, ...data }
-		console.log(state)
 	}
 }
 
