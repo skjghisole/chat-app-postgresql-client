@@ -1,3 +1,7 @@
+This is an my client side implementation for my Chat App.
+
+This is built with Vue and CSS only
+
 # client
 
 ## Project setup
