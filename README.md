@@ -4,6 +4,16 @@ This is built with Vue and CSS only
 
 # client
 
+## What's Inside?
+    .
+    ├── public
+    ├── src
+    ├── .gitignore
+    ├── babel.config.js
+    ├── package-lock.json
+    ├── package.json
+    └── README.md
+
 ## Project setup
 ```
 npm install
