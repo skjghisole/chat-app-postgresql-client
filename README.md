@@ -2,7 +2,8 @@ This is an my client side implementation for my Chat App.
 
 This is built with Vue and CSS only
 
-# client
+# Client Side of the Chat App
+[Click here](https://skjghisole-chitchat.netlify.com/) to visit the chat app
 
 ## What's Inside?
     .
